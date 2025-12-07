@@ -44,7 +44,7 @@ public:
                 int nr = row+dx[i];
                 int nc = col+dy[i];
 
-                if(isValid(nr,nc,m,n) && !vis[nr][nc])
+                if(isValid(nr,nc,m,n))
                 {
                     int diff = abs(v[nr][nc]-v[row][col]);
                     pq.push({max(diff,eff), {nr,nc}});
