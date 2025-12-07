@@ -1,50 +1,42 @@
-// #include <climits> // for LLONG_MAX
-
-typedef pair<long long, long long> pi;
+#include <bits/stdc++.h>
+using namespace std;
 
 class Solution {
 public:
-    int countPaths(int n, vector<vector<int>>& v) {
-        vector<vector<pi>> adj(n);
-        long long mod = 1e9 + 7;
-        for (auto it : v) {
-            long long u = it[0];
-            long long v = it[1];
-            long long w = it[2];
-
-            adj[u].push_back({v, w});
-            adj[v].push_back({u, w});
+    int countPaths(int n, vector<vector<int>>& r) {
+        vector<vector<pair<int, int>>> adj(n);
+        for (auto& it : r) {
+            adj[it[0]].push_back({it[1], it[2]});
+            adj[it[1]].push_back({it[0], it[2]});
         }
 
-        priority_queue<pi, vector<pi>, greater<pi>> pq;
-        vector<pair<long long, long long>> dis(n, {LLONG_MAX, 0});
+        priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<>> pq;
+        vector<pair<long long, long long>> dis(n, {1e18, 0});  // {distance, count}
+        
+        dis[0] = {0, 1};  // Start node: Distance = 0, Ways = 1
         pq.push({0, 0});
-        dis[0] = {0, 1};
+
+        long long MOD = 1e9 + 7;
 
         while (!pq.empty()) {
-            pair<long long, long long> f = pq.top();
+            auto [d, node] = pq.top();
             pq.pop();
 
-            long long d = f.first;
-            long long node = f.second;
+            if (d > dis[node].first) continue;  // Ignore outdated distances
 
-            // if (d > dis[node].first) continue; // Optimization
+            for (auto& [adN, wt] : adj[node]) {
+                long long newDist = d + wt;
 
-            for (auto it : adj[node]) {
-                long long child = it.first;
-                long long w = it.second;
-
-                if (w + d < dis[child].first) {
-                    dis[child].first = w + d;
-                    dis[child].second = dis[node].second;
-                    pq.push({dis[child].first, child});
-                } else if (w + d == dis[child].first) {
-                    dis[child].second =
-                        (dis[child].second + dis[node].second) % mod;
+                if (newDist < dis[adN].first) {
+                    dis[adN] = {newDist, dis[node].second};
+                    pq.push({newDist, adN});
+                }
+                else if (newDist == dis[adN].first) {
+                    dis[adN].second = (dis[adN].second + dis[node].second) % MOD;
                 }
             }
         }
 
-        return dis[n - 1].second % mod;
+        return dis[n - 1].second % MOD;
     }
 };
