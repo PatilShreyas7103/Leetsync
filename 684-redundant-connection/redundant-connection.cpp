@@ -1,51 +1,104 @@
-class Solution {
-public:
-    void solve(int node, vector<int> adj[], int &count,
-    vector<int> &vis)
-    {
-        vis[node] = 1;
 
-        for(auto it: adj[node])
+class DisJointSet
+{
+public:
+    vector<int> parent;
+    vector<int> rank;
+    vector<int> size;
+
+    DisJointSet(int n)
+    {
+        rank.resize(n + 1, 0);
+        parent.resize(n + 1);
+        size.resize(n + 1);
+
+        for (int i = 0; i <= n; i++)
         {
-            if(!vis[it])
-            {
-                count++;
-                solve(it,adj,count,vis);
-            }
+            parent[i] = i;
+            size[i] = 1;
         }
     }
 
+    int FindUpar(int node)
+    {
+        if (node == parent[node])
+        {
+            return node;
+        }
+
+        return parent[node] = FindUpar(parent[node]);
+    }
+
+    void UnionByRank(int u, int v)
+    {
+        int uu = FindUpar(u);
+        int uv = FindUpar(v);
+
+        if (uu == uv)
+        {
+            return;
+        }
+        if (rank[uu] < rank[uv])
+        {
+            parent[uu] = uv;
+        }
+        else if (rank[uu] > rank[uv])
+        {
+            parent[uv] = uu;
+        }
+        else
+        {
+            parent[uv] = uu;
+            rank[uu]++;
+        }
+    }
+
+    void UnionBySize(int u, int v)
+    {
+        int uu = FindUpar(u);
+        int uv = FindUpar(v);
+
+        if (uu == uv)
+        {
+            return;
+        }
+
+        if (size[uu] < size[uv])
+        {
+            parent[uu] = uv;
+            size[uv] += size[uu];
+        }
+        else
+        {
+            parent[uv] = uu;
+            size[uu] += size[uv];
+        }
+    }
+};
+
+class Solution {
+public:
     vector<int> findRedundantConnection(vector<vector<int>>& v) {
-        vector<int> ans;
         int n = v.size();
-        vector<int> adj[n+1];
-        int prev = 1;
+
+        DisJointSet ds(n+1);
+        vector<int> ans;
 
         for(auto it: v)
         {
-            int r = it[0];
-            int c = it[1];
 
-            adj[r].push_back(c);
-            adj[c].push_back(r);
+            int a = it[0];
+            int b = it[1];
 
-            int count = 0;
-            vector<int> vis(n+1,0);
-            for(int i=1; i<=n; i++)
-            {
-                if(!vis[i])
-                {
-                    solve(i,adj,count,vis);
-                }
-            }
-
-            if(count==prev)
+            if(ds.FindUpar(a)==ds.FindUpar(b))
             {
                 ans = it;
+                break;
             }
-            
-            prev = count;
-            
+            else
+            {
+                ds.UnionBySize(a,b);
+            }
         }
 
         return ans;
