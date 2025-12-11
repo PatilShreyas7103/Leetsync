@@ -4,7 +4,6 @@ public:
     vector<int> &vis)
     {
         vis[node] = 1;
-        // count++;
 
         for(auto it: adj[node])
         {
@@ -19,7 +18,6 @@ public:
     vector<int> findRedundantConnection(vector<vector<int>>& v) {
         vector<int> ans;
         int n = v.size();
-        // sort(v.begin(), v.end());
         vector<int> adj[n+1];
         int prev = 1;
 
@@ -33,7 +31,6 @@ public:
 
             int count = 0;
             vector<int> vis(n+1,0);
-            // solve(1,adj,count,vis);
             for(int i=1; i<=n; i++)
             {
                 if(!vis[i])
