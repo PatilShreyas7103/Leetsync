@@ -36,11 +36,8 @@ public:
         int m = board.size();
             int n = board[0].size();
 
-            // early pruning
-            if ((int)word.length() > m * n) return 0;
-
-            const int dx[4] = {-1, 0, 1, 0};
-            const int dy[4] = {0, 1, 0, -1};
+            int dx[4] = {-1, 0, 1, 0};
+            int dy[4] = {0, 1, 0, -1};
 
             vector<vector<int>> vis(m, vector<int>(n, 0));
 
