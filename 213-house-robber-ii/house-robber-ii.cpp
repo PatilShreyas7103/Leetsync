@@ -1,27 +1,6 @@
 class Solution {
 public:
-    int solve(int i, vector<int> &v, vector<int> &dp)
-    {
-        if(i==0)
-        {
-            return dp[i] =  v[0];
-        }
 
-        if(i==1)
-        {
-            return dp[i] =  max(v[0], v[1]);
-        }
-
-        if(dp[i]!=-1)
-        {
-            return dp[i];
-        }
-
-        int take = v[i]+solve(i-2,v,dp);
-        int dont = solve(i-1,v,dp);
-
-        return dp[i] = max(take,dont);
-    }
     int rob(vector<int>& v) {
         int n = v.size();
 
