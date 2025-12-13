@@ -50,9 +50,22 @@ public:
             v2.push_back(v[i]);
         }
 
-        int ans1 = solve(n-2,v1,dp1);
-        int ans2 = solve(n-2,v2,dp2);
+        dp1[0] = v1[0];
+        dp2[0] = v2[0];
+        dp1[1] = max(v1[0], v1[1]);
+        dp2[1] = max(v2[0], v2[1]);
 
-        return max(ans1,ans2);
+        for(int i=2; i<n-1; i++)
+        {
+            int take1 = v1[i]+dp1[i-2];
+            int dont1 = dp1[i-1];
+            dp1[i] = max(take1,dont1);
+
+            int take2 = v2[i]+dp2[i-2];
+            int dont2 = dp2[i-1];
+            dp2[i] = max(take2,dont2);
+        }
+
+        return max(dp1[n-2], dp2[n-2]);
     }
 };
