@@ -47,7 +47,7 @@ public:
         }
 
         int n = v.size();
-        vector<vector<int>> dp(n, vector<int> (sum+1,-1));
+        vector<vector<int>> dp(n, vector<int> (sum/2+1,-1));
         return solve(n-1,sum/2,v,dp);
     }
 };
