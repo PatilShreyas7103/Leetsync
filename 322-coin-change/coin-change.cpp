@@ -1,16 +1,17 @@
 class Solution {
 public:
-    int solve(int i, int t, vector<int> &c, vector<vector<int>> &dp)
+    int solve(int i, int t, vector<int> &c, 
+    vector<vector<int>> &dp)
     {
         if(i==0)
         {
-            if(t%c[i]==0)
+            if(t%c[0])
             {
-                return dp[i][t] =  t/c[i];
+                return dp[i][t] = 1e8;
             }
             else
             {
-                return 1e8;
+                return dp[i][t] = t/c[0];
             }
         }
 
@@ -19,19 +20,21 @@ public:
             return dp[i][t];
         }
 
-        int notTake = 0 + solve(i-1, t,c,dp);
+        int dont = solve(i-1,t,c,dp);
         int take = 1e8;
-        if(c[i]<=t)
+        if(t>=c[i])
         {
             take = 1+solve(i,t-c[i],c,dp);
         }
 
-        return dp[i][t] = min(take, notTake);
+        return dp[i][t] = min(take,dont);
     }
-    int coinChange(vector<int>& c, int t) {
-        int n = c.size();
-        vector<vector<int>> dp(n, vector<int> (t+1, -1));
-        int ans = solve(n-1,t,c,dp);
+    
+    int coinChange(vector<int>& v, int t) {
+        int n = v.size();
+        vector<vector<int>> dp(n, vector<int> (t+1,-1));
+
+        int ans = solve(n-1,t,v,dp);
         if(ans==1e8)
         {
             return -1;
