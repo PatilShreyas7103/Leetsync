@@ -30,15 +30,41 @@ public:
         return dp[i][t] = min(take,dont);
     }
     
-    int coinChange(vector<int>& v, int t) {
-        int n = v.size();
-        vector<vector<int>> dp(n, vector<int> (t+1,-1));
+    int coinChange(vector<int>& c, int t) {
+        int n = c.size();
+        vector<vector<int>> dp(n, vector<int> (t+1,1e8));
 
-        int ans = solve(n-1,t,v,dp);
-        if(ans==1e8)
+        for(int i=0; i<=t; i++)
+        {
+            if(i%c[0])
+            {
+                dp[0][i] = 1e8;
+            }
+            else
+            {
+                dp[0][i] = i/c[0];
+            }
+        }
+
+        for(int i=1; i<n; i++)
+        {
+            for(int j=0; j<=t; j++)
+            {
+                int dont = dp[i-1][j];
+                int take = 1e8;
+                if(j>=c[i])
+                {
+                    take = 1+dp[i][j-c[i]];
+                }
+
+                dp[i][j] = min(take,dont);
+            }
+        }
+
+        if(dp[n-1][t]==1e8)
         {
             return -1;
         }
-        return ans;
+        return dp[n-1][t];
     }
 };
