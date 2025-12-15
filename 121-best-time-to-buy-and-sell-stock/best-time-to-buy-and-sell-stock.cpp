@@ -7,25 +7,13 @@ public:
             return 0;
         }
 
-        vector<int> mn(n,INT_MAX);
-        vector<int> mx(n,INT_MIN);
-        int k = INT_MAX;
-
-        for(int i=0; i<n; i++)
-        {
-            k = min(k,v[i]);
-            mn[i] = k;
-        }
-        k = INT_MIN;
-        for(int i=n-1; i>=0; i--)
-        {
-            mx[i] = k;
-            k = max(k,v[i]);
-        }
         int ans = 0;
-        for(int i=0; i<n-1; i++)
+        int buy = v[0];
+
+        for(int i=1; i<n; i++)
         {
-            ans=max(ans,mx[i]-mn[i]);
+            ans=max(ans,v[i]-buy);
+            buy = min(buy,v[i]);
         }
 
         return ans;
