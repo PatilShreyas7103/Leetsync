@@ -37,27 +37,21 @@ public:
             trie.addWord(word);
         }
 
-        vector<int> dp(s.size() + 1, -1);
-        return dfs(0, s, trie, dp);
-    }
+        int n = s.size();
+        vector<int> dp(n + 1);
+        for (int i = n - 1; i >= 0; --i) {
+            dp[i] = 1 + dp[i + 1];
+            TrieNode* curr = trie.root;
 
-private:
-    int dfs(int i, const string& s, Trie& trie, vector<int>& dp) {
-        if (i == s.size()) return 0;
-        if (dp[i] != -1) return dp[i];
-
-        int res = 1 + dfs(i + 1, s, trie, dp);
-        TrieNode* curr = trie.root;
-
-        for (int j = i; j < s.size(); ++j) {
-            if (!curr->children[s[j] - 'a']) break;
-            curr = curr->children[s[j] - 'a'];
-            if (curr->isWord) {
-                res = min(res, dfs(j + 1, s, trie, dp));
+            for (int j = i; j < n; ++j) {
+                if (!curr->children[s[j] - 'a']) break;
+                curr = curr->children[s[j] - 'a'];
+                if (curr->isWord) {
+                    dp[i] = min(dp[i], dp[j + 1]);
+                }
             }
         }
 
-        dp[i] = res;
-        return res;
+        return dp[0];
     }
 };
