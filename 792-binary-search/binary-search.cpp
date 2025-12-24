@@ -3,11 +3,23 @@ public:
     int search(vector<int>& v, int t) {
         int n = v.size();
 
-        for(int i=0; i<n; i++)
+        int s = 0;
+        int e = n-1;
+
+        while(s<=e)
         {
-            if(v[i]==t)
+            int mid = (s+e)/2;
+            if(v[mid]==t)
             {
-                return i;
+                return mid;
+            }
+            else if(t>v[mid])
+            {
+                s = mid+1;
+            }
+            else
+            {
+                e = mid-1;
             }
         }
 
