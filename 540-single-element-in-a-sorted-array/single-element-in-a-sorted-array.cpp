@@ -17,7 +17,7 @@ public:
             {
                 if(v[mid]==v[mid+1])
                 {
-                    s = mid+2;
+                    s = mid+1;
                 }
                 else
                 {
