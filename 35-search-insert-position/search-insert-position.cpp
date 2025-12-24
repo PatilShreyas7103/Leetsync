@@ -4,22 +4,28 @@ public:
         int n = v.size();
         
         int ans = 0 ;
-        for(int i=0; i<n; i++)
+        int s = 0;
+        int e = n-1;
+
+        while(s<=e)
         {
-            if(v[i]>t)
+            int mid = (s+e)/2;
+
+            if(v[mid]==t)
             {
-                break;
+                return mid;
             }
-            else if(v[i]==t)
+            else if(v[mid]>t)
             {
-                return i;
+                e = mid-1;
             }
             else
             {
-                ans=i+1;
+                ans=mid+1;
+                s = mid+1;
             }
         }
-
+        
         return ans;
     }
 };
