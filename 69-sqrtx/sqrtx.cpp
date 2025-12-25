@@ -2,9 +2,12 @@ class Solution {
 public:
     int mySqrt(int x) {
         long long s = 0;
-        long long e = x;
+        long long e = x/2;
         long long ans = 0;
-
+        if(x==0 || x==1)
+        {
+            return x;
+        }
         while(s<=e)
         {
             long long mid = (s+e)/2;
