@@ -15,15 +15,15 @@ public:
         return 0;
     }
     int minEatingSpeed(vector<int>& v, int h) {
-        long long sum = 0;
-        for(auto it: v)
+        long long mx = 0;
+        for(long long it: v)
         {
-            sum+=it;
+            mx = max(mx,it);
         }
         long long n = v.size();
 
         long long s = 1;
-        long long e = sum;
+        long long e = mx;
         long long ans = 0;
 
         while(s<=e)
