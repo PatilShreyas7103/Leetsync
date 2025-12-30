@@ -1,24 +1,33 @@
 class Solution {
 public:
-    vector<int> findPeakGrid(vector<vector<int>>& v) {
-        int m = v.size();
-        int n = v[0].size();
-        int mx = -1;
-        int r = -1;
-        int c =  -1;
+    vector<int> findPeakGrid(vector<vector<int>>& mat) {
+        int m = mat.size();
+        int n = mat[0].size();
+        int left = 0, right = n - 1;
 
-        for(int i=0; i<m; i++)
-        {
-            for(int j=0; j<n; j++)
-            {
-                if(v[i][j]>mx)
-                {
-                    mx = v[i][j];
-                    r = i;
-                    c = j;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+
+            // Find the max element in the current middle column
+            int maxRow = 0;
+            for (int i = 1; i < m; ++i) {
+                if (mat[i][mid] > mat[maxRow][mid]) {
+                    maxRow = i;
                 }
             }
+
+            bool leftIsGreater = (mid > 0 && mat[maxRow][mid - 1] > mat[maxRow][mid]);
+            bool rightIsGreater = (mid < n - 1 && mat[maxRow][mid + 1] > mat[maxRow][mid]);
+
+            if (!leftIsGreater && !rightIsGreater) {
+                return {maxRow, mid}; // Found a peak
+            } else if (leftIsGreater) {
+                right = mid - 1; // Move to the left half
+            } else {
+                left = mid + 1; // Move to the right half
+            }
         }
-        return {r,c};
+
+        return {-1, -1}; // Should not reach here for a valid input
     }
 };
