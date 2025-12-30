@@ -4,14 +4,43 @@ public:
         int m = v.size();
         int n = v[0].size();
 
-        for(int i=0; i<m; i++)
+        int i= 0;
+        int j = m-1;
+        bool f = false;
+        int row = -1;
+
+        while(i<=j)
         {
-            for(int j=0; j<n; j++)
+            int mid = (i+j)/2;
+
+            int s = v[mid][0];
+            int e = v[mid][n-1];
+
+            if(t>=s && t<=e)
             {
-                if(v[i][j]==t)
-                {
-                    return true;
-                }
+                // found row
+                f = true;
+                row = mid;
+                break;
+            }
+            else if(t<s)
+            {
+                j = mid-1;
+            }
+            else
+            {
+                i = mid+1;
+            }
+        }
+
+        if(!f){
+            return false;
+        }
+        for(auto it: v[row])
+        {
+            if(it==t)
+            {
+                return true;
             }
         }
 
