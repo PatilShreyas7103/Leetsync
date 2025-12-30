@@ -36,11 +36,25 @@ public:
         if(!f){
             return false;
         }
-        for(auto it: v[row])
+        int s =0;
+        int e = n-1;
+
+        while(s<=e)
         {
-            if(it==t)
+            int mid = (s+e)/2;
+            int element = v[row][mid];
+
+            if(element==t)
             {
                 return true;
+            }
+            else if(element<t)
+            {
+                s = mid+1;
+            }
+            else
+            {
+                e = mid-1;
             }
         }
 
