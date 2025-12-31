@@ -1,27 +1,24 @@
-// Find Minimum in Rotated Sorted Array (With Duplicates)
-
-#include <bits/stdc++.h>
-using namespace std;
-
 class Solution {
 public:
     int findMin(vector<int>& nums) {
-        int s = 0;
-        int e = nums.size() - 1;
+        int n = nums.size();
+        int s = 0 , e = n -1 , minEle = INT_MAX;
 
-        while (s < e) {
-            int mid = s + (e - s) / 2;
-
-            if (nums[mid] < nums[e]) {
-                e = mid;
+        while( s <= e){
+            int mid = s + (e - s)/2;
+            if(nums[s] == nums[mid] && nums[mid] == nums[e]){
+                minEle = min( minEle , nums[s]);
+                s++ , e-- ;
+                continue;
             }
-            else if (nums[mid] > nums[e]) {
-                s = mid + 1;
+            if(nums[s] <= nums[mid] ){
+                minEle = min( minEle , nums[s]);
+                s = mid +1;
+            }else{
+                minEle = min( minEle , nums[mid]);
+                e = mid - 1;
             }
-            else {
-                e--;  // shrink duplicates
-            }
-        }
-        return nums[s];
+        }   
+            return minEle ;
     }
 };
