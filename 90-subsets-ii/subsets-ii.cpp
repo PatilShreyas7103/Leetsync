@@ -1,31 +1,28 @@
 class Solution {
 public:
-    void solve(int n, vector<int> &v, vector<int> ans, set<vector<int>> &st) {
-        if (n < 0) {
-            st.insert(ans);
-            return;
+    void solve(int idx, vector<int>& v,
+               vector<int>& ans, vector<vector<int>>& res) {
+
+        res.push_back(ans);
+
+        for (int i = idx; i < v.size(); i++) {
+            // skip duplicates at the same recursion level
+            if (i > idx && v[i] == v[i - 1]) {
+                continue;
+            }
+
+            ans.push_back(v[i]);
+            solve(i + 1, v, ans, res);
+            ans.pop_back();
         }
-
-        // exclude current element
-        solve(n - 1, v, ans, st);
-
-        // include current element
-        ans.push_back(v[n]);
-        solve(n - 1, v, ans, st);
-        ans.pop_back();
-
     }
 
     vector<vector<int>> subsetsWithDup(vector<int>& v) {
         sort(v.begin(), v.end());
+
         vector<vector<int>> res;
-        set<vector<int>> st;
         vector<int> ans;
-        solve(v.size() - 1, v, ans, st);
-        for(auto vec: st)
-        {
-            res.push_back(vec);
-        }
+        solve(0, v, ans, res);
         return res;
     }
 };
