@@ -1,41 +1,37 @@
 
 class Solution {
 public:
-    void solve(int i, int n,
-               vector<int> &ans,
-               set<vector<int>> &res,
-               vector<int> &vis,
-               vector<int> &v) {
+    vector<vector<int>> res;
+    unordered_map<int,int> cnt;
 
-        if (i == n) {
-            res.insert(ans);
+    void solve(int n, vector<int> &ans) {
+        if (ans.size() == n) {
+            res.push_back(ans);
             return;
         }
 
-        for (int j = 0; j < n; j++) {
-            if (vis[j]) continue;
+        for (auto &it : cnt) {
+            int val = it.first;
+            int &freq = it.second;
 
-            vis[j] = 1;
-            ans.push_back(v[j]);
+            if (freq == 0) continue;
 
-            solve(i + 1, n, ans, res, vis, v);
+            freq--;
+            ans.push_back(val);
+
+            solve(n, ans);
 
             ans.pop_back();
-            vis[j] = 0;
+            freq++;
         }
     }
 
-    vector<vector<int>> permuteUnique(vector<int>& v) {
-        int n = v.size();
-        set<vector<int>> res;
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        for (int x : nums) cnt[x]++;
+
         vector<int> ans;
-        vector<int> vis(n, 0);
-        vector<vector<int>> p;
-        solve(0, n, ans, res, vis, v);
-        for(auto vec: res)
-        {
-            p.push_back(vec);
-        }
-        return p;
+        solve(nums.size(), ans);
+
+        return res;
     }
 };
