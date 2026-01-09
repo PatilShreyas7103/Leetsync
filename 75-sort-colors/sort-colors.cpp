@@ -1,33 +1,23 @@
 class Solution {
 public:
-    void sortColors(vector<int>& v) {
-        int n = v.size();
-        int l = -1;
-        int r = n;
+    void sortColors(vector<int>& nums) {
+    int n = nums.size();
+    int low = 0, mid = 0, high = n - 1; // 3 pointers
 
-        for(auto it: v)
-        {
-            if(it==0)
-            {
-                l++;
-            }
-            else if(it==2)
-            {
-                r--;
-            }
+    while (mid <= high) {
+        if (nums[mid] == 0) {
+            swap(nums[low], nums[mid]);
+            low++;
+            mid++;
         }
-
-        for(int i=0; i<=l; i++)
-        {
-            v[i] = 0;
+        else if (nums[mid] == 1) {
+            mid++;
         }
-        for(int i=n-1; i>=r; i--)
-        {
-            v[i] = 2;
-        }
-        for(int i=l+1; i<r; i++)
-        {
-            v[i] = 1;
+        else {
+            swap(nums[mid], nums[high]);
+            high--;
         }
     }
+
+    } 
 };
