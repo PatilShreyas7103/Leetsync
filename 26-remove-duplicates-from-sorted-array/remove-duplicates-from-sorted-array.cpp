@@ -1,19 +1,17 @@
 class Solution {
 public:
-    int removeDuplicates(vector<int>& v) {
-        int n = v.size();
-        map<int,int> mp;
-        for(auto it: v)
+    int removeDuplicates(vector<int>& nums) {
+        int uniqueIndex = 1;
+        int n = nums.size();
+        for(int i=1; i<n; i++)
         {
-            mp[it]++;
-        }
-        int id = 0;
-        for(auto it: mp)
-        {
-            int e = it.first;
-            v[id++] =  e;
+            if(nums[i]!=nums[i-1])
+            {
+                nums[uniqueIndex] = nums[i];
+                uniqueIndex++;
+            }
         }
 
-        return mp.size();
+        return uniqueIndex;
     }
 };
