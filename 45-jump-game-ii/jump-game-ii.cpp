@@ -2,22 +2,19 @@ class Solution {
 public:
 
     int jump(vector<int>& v) {
-        int n = v.size();
-        vector<int> dp(n+1,0);
+        int jumps = 0;
+        int currEnd = 0;
+        int farthest = 0;
 
-        for(int i=n-2; i>=0; i--)
-        {
-            int start = i+1;
-            int end = min(n-1,i+v[i]);
-            long long ans = INT_MAX;
-            for(int j=start;j<=end; j++)
-            {
-                long long res = (long long)1+dp[j];
-                ans=min(ans,res);
+        for (int i = 0; i < v.size() - 1; i++) {
+            farthest = max(farthest, i + v[i]);
+
+            if (i == currEnd) {
+                jumps++;
+                currEnd = farthest;
             }
-            dp[i] = ans;
         }
 
-        return dp[0];
+        return jumps;
     }
 };
