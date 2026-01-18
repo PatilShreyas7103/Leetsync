@@ -2,43 +2,52 @@ class Solution {
 public:
     vector<string> fullJustify(vector<string>& words, int maxWidth) {
         vector<string> res;
-        vector<string> line;
-        int length = 0, i = 0;
+        int n = words.size();
+        int i = 0;
 
-        while (i < words.size()) {
-            if (length + words[i].size() + line.size() <= maxWidth) {
+        while (i < n) {
+            vector<string> line;
+            int length = 0;
+
+            // pack words into current line
+            while (i < n && length + words[i].size() + line.size() <= maxWidth) {
                 line.push_back(words[i]);
                 length += words[i].size();
                 i++;
-            } else {
-                // Line complete
-                int extra_space = maxWidth - length;
-                int remainder = extra_space % max(1, (int)(line.size() - 1));
-                int space = extra_space / max(1, (int)(line.size() - 1));
+            }
 
-                for (int j = 0; j < max(1, (int)line.size() - 1); j++) {
-                    line[j] += string(space, ' ');
-                    if (remainder > 0) {
-                        line[j] += " ";
-                        remainder--;
+            int gaps = line.size() - 1;
+            string currLine = "";
+
+            // last line OR single word line → left justified
+            if (i == n || gaps == 0) {
+                for (int k = 0; k < line.size(); k++) {
+                    currLine += line[k];
+                    if (k != line.size() - 1)
+                        currLine += " ";
+                }
+                currLine += string(maxWidth - currLine.size(), ' ');
+            }
+            // fully justified line
+            else {
+                int totalSpaces = maxWidth - length;
+                int spaceEach = totalSpaces / gaps;
+                int extra = totalSpaces % gaps;
+
+                for (int k = 0; k < line.size(); k++) {
+                    currLine += line[k];
+                    if (k < gaps) {
+                        currLine += string(spaceEach, ' ');
+                        if (extra > 0) {
+                            currLine += " ";
+                            extra--;
+                        }
                     }
                 }
-
-                string justified_line = accumulate(line.begin(), line.end(), string());
-                res.push_back(justified_line);
-                line.clear();
-                length = 0;
             }
-        }
 
-        // Handling last line
-        string last_line = accumulate(line.begin(), line.end(), string(),
-                                      [](string a, string b) {
-                                            return a.empty() ? b : a + " " + b;
-                                        });
-        int trail_space = maxWidth - last_line.size();
-        last_line += string(trail_space, ' ');
-        res.push_back(last_line);
+            res.push_back(currLine);
+        }
 
         return res;
     }
