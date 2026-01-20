@@ -1,25 +1,27 @@
 class Solution {
 public:
     int longestSubstring(string s, int k) {
-        int n = s.size();
-        int ans = 0;
+        return solve(s, 0, s.size(), k);
+    }
 
-        for (int i = 0; i < n; i++) {
-            vector<int> freq(26, 0);
-            for (int j = i; j < n; j++) {
-                freq[s[j] - 'a']++;
+private:
+    int solve(string &s, int start, int end, int k) {
+        if (end - start < k) return 0;
 
-                bool valid = true;
-                for (int c = 0; c < 26; c++) {
-                    if (freq[c] > 0 && freq[c] < k) {
-                        valid = false;
-                        break;
-                    }
-                }
-                if (valid)
-                    ans = max(ans, j - i + 1);
+        vector<int> freq(26, 0);
+        for (int i = start; i < end; i++) {
+            freq[s[i] - 'a']++;
+        }
+
+        for (int i = start; i < end; i++) {
+            if (freq[s[i] - 'a'] < k) {
+                int left = solve(s, start, i, k);
+                int right = solve(s, i + 1, end, k);
+                return max(left, right);
             }
         }
-        return ans;
+
+        // All characters have frequency >= k
+        return end - start;
     }
 };
