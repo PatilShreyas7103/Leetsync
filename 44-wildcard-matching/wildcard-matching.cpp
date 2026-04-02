@@ -1,51 +1,94 @@
 class Solution {
 public:
-    bool isMatch(string s, string t) {
-
-        int n = s.length();
-        int m = t.length();
-
-        vector<vector<int>> dp(n+1, vector<int> (m+1,0));
-        dp[0][0] = 1;
-        for(int i=1; i<=n; i++)
+    bool solve (int i, int j, string &s, string &p)
+    {
+        if(i<0)
         {
-            dp[i][0] = false;
+            // string done
+            for(int id=0; id<=j; id++)
+            {
+                if(p[id]!='*')
+                {
+                    return false;
+                }
+            }
+            return true;
         }
-        bool f = true;
-        for(int j=1; j<=m; j++)
+        if(j<0)
         {
-            if(t[j-1]!='*')
+            return false;
+        }
+
+        if(p[j]=='*')
+        {
+            bool op1 = solve(i-1,j-1,s,p);
+            bool op2 = solve(i,j-1,s,p);
+            bool op3 = solve(i-1,j,s,p);
+
+            return op1 || op2 || op3;
+        }
+        else if(p[j]=='?')
+        {
+            return solve(i-1,j-1,s,p);
+        }
+        else
+        {
+            if(s[i]!=p[j])
+            {
+                return false;
+            }
+            else
+            {
+                return solve(i-1,j-1,s,p);
+            }
+        }
+    }
+
+    bool isMatch(string s, string p) {
+        int m = s.length();
+        int n = p.length();
+
+        vector<vector<int>> dp(m+1, vector<int> (n+1,0));
+        bool f = true;
+        for(int j=0; j<=n; j++)
+        {
+            
+            dp[0][j] = f;
+            if(p[j]!='*')
             {
                 f = false;
             }
-            dp[0][j] = f;
         }
 
-        for(int i=1; i<=n; i++){
-            for(int j=1; j<=m;  j++)
+        for(int i=1; i<=m; i++)
+        {
+            for(int j=1; j<=n; j++)
             {
-                if(s[i-1]==t[j-1])
+                if(p[j-1]=='*')
                 {
-                    dp[i][j] = dp[i-1][j-1];
+                    bool op1 = dp[i-1][j-1];
+                    bool op2 = dp[i-1][j];
+                    bool op3 = dp[i][j-1];
+
+                    dp[i][j] =  op1 || op2 || op3;
+                }
+                else if(p[j-1]=='?')
+                {
+                    dp[i][j] =  dp[i-1][j-1];
                 }
                 else
                 {
-                    if(t[j-1]=='?')
+                    if(s[i-1]!=p[j-1])
                     {
-                        dp[i][j] = dp[i-1][j-1];
-                    }
-                    else if(t[j-1]=='*')
-                    {
-                        dp[i][j] = dp[i-1][j] || dp[i][j-1];
+                        dp[i][j] =  false;
                     }
                     else
                     {
-                        dp[i][j] = false;
+                        dp[i][j] =  dp[i-1][j-1];
                     }
                 }
             }
         }
-
-        return dp[n][m];
+        return dp[m][n];
     }
 };
