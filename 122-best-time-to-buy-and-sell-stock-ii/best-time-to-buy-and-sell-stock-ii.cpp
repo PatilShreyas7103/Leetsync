@@ -13,18 +13,25 @@ public:
             return dp[i][buy];
         }
 
-        if(buy)
+        int dont = solve(i+1,buy,v,n,dp);
+        int take = INT_MIN;
+
+        if(buy==1)
         {
-            return dp[i][buy] = max(solve(i+1,buy,v,n,dp), -v[i]+solve(i+1,!buy,v,n,dp));
+             take = -v[i]+solve(i+1,0,v,n,dp);
         }
         else
         {
-            return dp[i][buy] = max(solve(i+1,buy,v,n,dp), v[i]+solve(i+1,!buy,v,n,dp));
+            // sell
+             take = v[i]+solve(i+1,1,v,n,dp);
         }
+        return dp[i][buy] =  max(take,dont);
     }
     int maxProfit(vector<int>& v) {
         int n = v.size();
         vector<vector<int>> dp(n, vector<int> (2,-1));
+
         return solve(0,1,v,n,dp);
+
     }
 };
