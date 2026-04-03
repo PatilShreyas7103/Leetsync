@@ -1,22 +1,40 @@
 class Solution {
 public:
-    int lengthOfLIS(vector<int>& v) {
-        vector<int> temp;
-        int n = v.size();
-        temp.push_back(v[0]);
-        for(int i=1; i<n; i++)
+    int solve(int i, int prev, vector<int> &v, int n,
+    vector<vector<int>> &dp)
+    {
+        if(i==n)
         {
-            if(v[i]>temp.back())
-            {
-                temp.push_back(v[i]);
-            }
-            else
-            {
-                int id = lower_bound(temp.begin(), temp.end(), v[i])-temp.begin();
-                temp[id] = v[i];
+            return 0;
+        }
+
+        
+        if(dp[i][prev+1]!=-1)
+        {
+            return dp[i][prev+1];
+        }
+        
+
+        int dont = solve(i+1,prev,v,n,dp);
+        int take = 0;
+        if(prev==-1)
+        {
+            take = 1+solve(i+1,i,v,n,dp);
+        }
+        else
+        {
+            if(v[i]>v[prev])
+            { 
+                // valid
+                take = 1+solve(i+1,i,v,n,dp);
             }
         }
 
-        return temp.size();
+        return dp[i][prev+1] =  max(take,dont);
+    }
+    int lengthOfLIS(vector<int>& v) {
+        int n = v.size();
+        vector<vector<int>> dp(n+1, vector<int> (n+1,-1));
+        return solve(0,-1,v,n,dp);
     }
 };
