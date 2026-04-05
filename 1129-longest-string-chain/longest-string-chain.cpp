@@ -1,35 +1,93 @@
 class Solution {
 public:
-    bool validate(const string &s, const string &t) {
-        if (s.length() + 1 != t.length()) return false;
-        int i = 0, j = 0;
-        while (i < s.length() && j < t.length()) {
-            if (s[i] == t[j]) {
-                i++; j++;
-            } else {
+    bool valid(string p, string q)
+    {
+        // p must be longger
+        int m = p.length();
+        int n = q.length();
+
+        if(n+1!=m)
+        {
+            return false;
+        }
+        int j = 0;
+        int cnt = 0;
+        for(int i=0; i<m; i++)
+        {
+            if(p[i]==q[j])
+            {
                 j++;
             }
-            if (j - i > 1) return false;
+            else
+            {
+                cnt++;
+            }
         }
-        return true;
+        if(cnt==1)
+        {
+            return true;
+        }
+        return false;
+    }
+    int solve(int i, int prev, vector<string> &v, int n)
+    {
+        if(i==n)
+        {
+            return 0;
+        }
+
+        int dont = solve(i+1,prev,v,n);
+        int take = 0;
+
+        if(prev==-1)
+        {
+            // first string
+            take = 1+solve(i+1,i,v,n);
+        }
+        else
+        {
+            if(valid(v[i],v[prev]))
+            {
+                take = 1+solve(i+1,i,v,n);
+            }
+        }
+
+        return max(take,dont);
     }
 
-    int longestStrChain(vector<string>& words) {
-        int n = words.size();
-        sort(words.begin(), words.end(), [](const string &a, const string &b) {
-            return a.length() < b.length();
-        });
+    int longestStrChain(vector<string>& v) {
+        int n = v.size();
 
-        vector<int> dp(n, 1);
-        int mx = 1;
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < i; ++j) {
-                if (validate(words[j], words[i]) && dp[j] + 1 > dp[i]) {
-                    dp[i] = dp[j] + 1;
+        vector<int> dp(n,1);
+        int ans = 0;
+
+        for(int i=0; i<n; i++)
+        {
+            for(int j=i+1; j<n; j++)
+            {
+                int k1 = v[i].size();
+                int k2 = v[j].size();
+
+                if(k2<k1)
+                {
+                    swap(v[i],v[j]);
                 }
             }
-            mx = max(mx, dp[i]);
         }
-        return mx;
+
+        for(int i=0; i<n; i++)
+        {
+            for(int j=0; j<i; j++)
+            {
+                if(valid(v[i], v[j]))
+                {
+                    dp[i] = max(dp[i], 1+dp[j]);
+                }
+            }
+            ans=max(ans,dp[i]);
+        }
+
+        // return solve(0,-1,v,n);
+        return ans;
     }
 };
