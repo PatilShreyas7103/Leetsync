@@ -2,39 +2,38 @@ class Solution {
 public:
     int findNumberOfLIS(vector<int>& v) {
         int n = v.size();
-        vector<pair<int,int>> dp(n, {1,1});
         int mx = 0;
+        vector<int> f(n,1);
+        int cnt = 0;
 
-        for(int i=0;i<n; i++)
+        vector<int> dp(n,0);
+        for(int i=0; i<n;i++)
         {
-            for(int j=0; j<i; j++){
-                if(v[j]<v[i])
+            for(int j=0; j<i; j++)
+            {
+                if(v[i]>v[j])
                 {
-                    if(1+dp[j].first==dp[i].first)
+                    if(dp[i]<1+dp[j])
                     {
-                        dp[i].second+= dp[j].second;
+                        dp[i] = 1+dp[j];
+                        f[i] = f[j];
                     }
-                    else if(1+dp[j].first>dp[i].first)
+                    else if(dp[i]==1+dp[j])
                     {
-                        dp[i].second = dp[j].second;
-                        dp[i].first=1+dp[j].first;
+                        f[i]+= f[j];
                     }
                 }
             }
-            if(dp[i].first>mx)
-            {
-                mx = dp[i].first;
-            }
+            mx = max(mx,dp[i]);
         }
-        int ans  = 0;
-        for(auto it: dp)
+        for(int i=0; i<n; i++)
         {
-            if(it.first==mx)
+            if(dp[i]==mx)
             {
-                ans+= it.second;
+                cnt+= f[i];
             }
         }
 
-        return ans;
+        return cnt;
     }
 };
