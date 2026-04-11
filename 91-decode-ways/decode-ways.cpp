@@ -1,42 +1,38 @@
 class Solution {
 public:
-    int solve(int i, string s, int n, vector<int> &dp)
-    {
-        if(i==n)
+
+    int numDecodings(string s) {
+        int n = s.length();
+        vector<int> dp(n+1,0);
+        dp[n] = 1;
+
+        for(int i=n-1; i>=0; i--)
         {
-            return 1;
-        }
-        if(s[i]=='0')
-        {
-            return 0;
-        }
-        if(dp[i]!=-1)
-        {
-            return dp[i];
-        }
-        int num = 0;
-        int res = 0;
-        for(int j=i; j<n; j++)
-        {
-            num = (long long)num*10 + s[j]-'0';
-            if(num>=1 && num<=26)
+            if(s[i]=='0')
             {
-                res += solve(j+1,s,n,dp);
+                dp[i] = 0;
             }
             else
             {
-                break;
+                int num = 0;
+                int res = 0;
+                for(int j=i; j<n; j++)
+                {
+                    num = (long long)num*10 + s[j]-'0';
+                    if(num>=1 && num<=26)
+                    {
+                        res += dp[j+1];
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                dp[i] = res;
             }
         }
 
-        return dp[i] = res;
-    }
-    int numDecodings(string s) {
-        int n = s.length();
-        vector<int> dp(n,-1);
-
-        int ans = solve(0,s,n,dp);
-
-        return ans;
+        return dp[0];
     }
 };
