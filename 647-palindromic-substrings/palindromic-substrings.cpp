@@ -1,38 +1,47 @@
 
 class Solution {
 public:
-    bool isValid(string s)
-    {
-        int i  = 0;
-        int j = s.length()-1;
-        while(i<j)
-        {
-            if(s[i]!=s[j])
-            {
-                return false;
-            }
-            i++;
-            j--;
-        }
-
-        return true;
-    }
     int solve(string s) {
         int n = s.length();
         int mx = 0;
         int ans = 0;
-
-        for(int i=0;i<n; i++)
+        int st = 0;
+        int e = 0;
+        
+        for(int k=0; k<n; k++)
         {
-            string str = "";
-            for(int j=i; j<n; j++)
+            int i = k;
+            int j = k;
+
+            while(i>=0 && j<n)
             {
-                str+= s[j];
-                if(isValid(str))
-                {   
+                if(s[i]==s[j])
+                {
                     ans++;
+                    i--;
+                    j++;
                 }
-                
+                else
+                {
+                    break;
+                }
+            }
+
+            i = k;
+            j = k+1;
+
+            while(i>=0 && j<n)
+            {
+                if(s[i]==s[j])
+                {
+                    ans++;
+                    i--;
+                    j++;
+                }
+                else
+                {
+                    break;
+                }
             }
         }
 
