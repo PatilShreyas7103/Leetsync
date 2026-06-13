@@ -1,6 +1,7 @@
 class Solution {
 public:
     bool increasingTriplet(vector<int>& v) {
+        
         int first = INT_MAX;
         int second = INT_MAX;
 
