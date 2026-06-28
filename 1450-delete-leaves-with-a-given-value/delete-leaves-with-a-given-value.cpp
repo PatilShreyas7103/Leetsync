@@ -18,10 +18,10 @@ public:
             return NULL;
         }
 
-        if(!root->left && !root->right && root->val==t)
-        {
-            return NULL;
-        }
+        // if(!root->left && !root->right && root->val==t)
+        // {
+        //     return NULL;
+        // }
 
         root->left = solve(root->left,t);
         root->right = solve(root->right,t);
