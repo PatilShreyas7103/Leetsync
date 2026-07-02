@@ -1,45 +1,66 @@
 class Solution {
 public:
-    bool isValid(int i, int j, int m, int n)
+    bool isValid(int r, int c,int m, int n)
     {
-        return (i>=0 && j>=0 && i<m && j<n);
-    }
-
-    void dfs(int r, int c, int m, int n, vector<vector<char>>& v, vector<vector<int>> &vis, int dr[], int dc[])
-    {
-        vis[r][c] = 1;
-
-        for(int i=0; i<4; i++)
-        {
-            int nr = r+dr[i];
-            int nc = c+dc[i];
-
-            if(isValid(nr,nc,m,n))
-            {
-                if(!vis[nr][nc] && v[nr][nc]=='O')
-                {
-                    dfs(nr,nc,m,n,v,vis,dr,dc);
-                }
-            }
-        }
+        return (r<m && c<n && r>=0 && c>=0);
     }
 
     void solve(vector<vector<char>>& v) {
         int m = v.size();
         int n = v[0].size();
-        vector<vector<int>> vis(m, vector<int> (n,0));
+        queue<pair<int,int>> q;
         int dr[] = {-1,0,1,0};
         int dc[] = {0,1,0,-1};
 
-        for(int i=0; i<m; i++)
+        vector<vector<int>> vis(m, vector<int> (n,0));
+
+        for(int i=0;i<m; i++)
         {
-            for(int j=0; j<n; j++)
+            if(v[i][0]=='O')
             {
-                if(i==0 || i==m-1 || j==0 || j==n-1)
+                vis[i][0] = 1;
+                q.push({i,0});
+            }
+            if(v[i][n-1]=='O')
+            {
+                vis[i][n-1] = 1;
+                q.push({i,n-1});
+            }
+        }
+
+        for(int i=0;i<n; i++)
+        {
+            if(v[0][i]=='O')
+            {
+                vis[0][i] = 1;
+                q.push({0,i});
+            }
+            if(v[m-1][i]=='O')
+            {
+                vis[m-1][i] = 1;
+                q.push({m-1,i});
+            }
+        }
+
+        while(!q.empty())
+        {
+            auto cor = q.front();
+            q.pop();
+
+            int r = cor.first;
+            int c = cor.second;
+
+            for(int i=0; i<4; i++)
+            {
+                int adjr = r+dr[i];
+                int adjc = c+dc[i];
+
+                if(isValid(adjr,adjc,m,n))
                 {
-                    if(v[i][j]=='O')
+                    if(v[adjr][adjc]=='O' && !vis[adjr][adjc])
                     {
-                        dfs(i,j,m,n,v,vis,dr,dc);
+                        q.push({adjr,adjc});
+                        vis[adjr][adjc] = 1;
                     }
                 }
             }
@@ -49,7 +70,7 @@ public:
         {
             for(int j=0; j<n; j++)
             {
-                if(vis[i][j]==0)
+                if(v[i][j]=='O' && !vis[i][j])
                 {
                     v[i][j] = 'X';
                 }
