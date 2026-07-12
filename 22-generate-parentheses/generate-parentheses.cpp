@@ -16,7 +16,6 @@ public:
             return;
         }
         
-
         solve(n1-1,n2,s+'(',ans);
         solve(n1,n2-1,s+')',ans);
     }
