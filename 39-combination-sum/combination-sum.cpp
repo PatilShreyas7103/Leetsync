@@ -25,13 +25,12 @@ public:
             solve(i,t-v[i],v,ans,curr);
             curr.pop_back();
         }
-
     }
 
     vector<vector<int>> combinationSum(vector<int>& v, int t) {
         vector<vector<int>> ans;
         vector<int> curr;
-
+        
         int n = v.size();
         solve(n-1,t,v,ans,curr);
 
